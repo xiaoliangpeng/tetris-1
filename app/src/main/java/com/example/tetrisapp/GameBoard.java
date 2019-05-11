@@ -2,7 +2,7 @@ package com.example.tetrisapp;
 
 import android.graphics.Color;
 
-public class GameBoard {
+public class GameBoard implements GameBoardMethod{
 
     int boardHeight = 20;
     int boardWidth = 10;
