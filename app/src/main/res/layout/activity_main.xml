@@ -6,13 +6,115 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-46dp"
+        tools:layout_editor_absoluteY="-16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="630dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/left_imageButton"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@null"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/left_button_img" />
+
+            <ImageButton
+                android:id="@+id/rotate_imageButton"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@null"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/rotate_button_img" />
+
+            <ImageButton
+                android:id="@+id/down_imageButton"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@null"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/down_button_img" />
+
+            <ImageButton
+                android:id="@+id/right_imageButton"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@null"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/right_button_img" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sidebar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="393dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="-2dp"
+            android:layout_marginRight="-2dp"
+            android:layout_marginBottom="286dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/scoretext_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="SCORE:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="75dp" />
+
+            <Button
+                android:id="@+id/start_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="START" />
+
+            <Button
+                android:id="@+id/quit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="QUIT" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/board_layout"
+            android:layout_width="315dp"
+            android:layout_height="504dp">
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+
 
 </android.support.constraint.ConstraintLayout>
