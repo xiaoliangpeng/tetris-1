@@ -1,4 +1,4 @@
-package com.example.tetrisapp;
+package com.example.admin.tetris;
 
 public interface GameBoardMethod {
     /**
@@ -51,7 +51,7 @@ public interface GameBoardMethod {
 
     /**
      * Very complex
-     *  Depends on {@link this.canMoveLeft(), this.canMoveRight(), this.canMoveDown()}
+     *  Depends on {@link #canMoveLeft()}{@link #canMoveRight()} {@link #canMoveDown()}
      * IF such a step is acceptable, we return true. Else false.
      * @param currentPiece
      * @return
@@ -63,15 +63,44 @@ public interface GameBoardMethod {
      */
     void deletePiece(Piece currentPiece);
     /**
-     * Depends on {@link this.placePiece()}
+     * Depends on {@link #placePiece()}
      * checks to see if a piece can rotate and then rotates it.
      * @param currentPiece
      */
     void rotatePiece(Piece currentPiece);
 	
-	void fastDrop(Piece currentPiece); 
+	
 	boolean canMoveLeft(Piece currentPiece, int x, int y); 
 	boolean canMoveRight(Piece currentPiece, int x, int y); 
-	boolean canMoveDown(Piece currentPiece, int x, int y); 
+	boolean canMoveDown(Piece currentPiece, int x, int y);
+
+    /**
+     * if {@link #canMoveLeft(Piece currentPiece, int x, int y)}then {@link #movePiece(Piece currentPiece, int x, int y}
+     * where x = 0 and y = -1
+     * @param currentPiece
+     */
+    void moveLeft(Piece currentPiece);
+
+    /**
+     * if {@link #canMoveRight(Piece currentPiece, int x, int y)}then {@link #movePiece(Piece currentPiece, int x, int y}
+     * where x = 0 and y = 1
+     * @param currentPiece
+     */
+    void moveRight(Piece currentPiece);
+
+    /**
+     * if {@link #canMoveDown(Piece currentPiece, int x, int y)}then {@link #movePiece(Piece currentPiece, int x, int y}
+     * where x = 1 and y = 0
+     * @param currentPiece
+     */
+    void moveDown(Piece currentPiece);
+
+    /**
+     * deletePiece, then currentPiece.move(x,y), then placePiece(currentPiece)
+     * @param currentPiece
+     * @param x
+     * @param y
+     */
+    void movePiece(Piece currentPiece, int x, int y);
 
 }
