@@ -68,5 +68,10 @@ public interface GameBoardMethod {
      * @param currentPiece
      */
     void rotatePiece(Piece currentPiece);
+	
+	void fastDrop(Piece currentPiece); 
+	boolean canMoveLeft(Piece currentPiece, int x, int y); 
+	boolean canMoveRight(Piece currentPiece, int x, int y); 
+	boolean canMoveDown(Piece currentPiece, int x, int y); 
 
 }

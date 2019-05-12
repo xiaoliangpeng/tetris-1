@@ -17,6 +17,13 @@ public class GameBoard implements GameBoardMethod {
     int boardWidth = 10;
 
     private int gameBoard[][] = new int [boardHeight][boardWidth];
+	private ArrayList<Piece> pieceList = new ArrayList<Piece>();
+    private  final int numOfPieces = 7;
+	
+	public GameBoard() {
+        pieceList.add(new Piece(random.nextInt(numOfPieces)+1));
+        pieceList.add(new Piece(random.nextInt(numOfPieces)+1));
+     }
 
     // Get color from coordinate
     public int codeToColor(int x, int y){
@@ -44,6 +51,19 @@ public class GameBoard implements GameBoardMethod {
         }
     }
 
+
+    public  ArrayList<Piece> getPieceList(){
+        return pieceList;
+    }
+
+    public Piece getCurrentPiece()  {
+              return pieceList.get(pieceList.size() - 2);
+     }
+
+    public Piece getNextPiece() {
+         return pieceList.get(pieceList.size()-1);
+    }
+	
     // Sets all board elements to BLACK
     public void clearBoardGame(){
         for (int row = 0; row < 20; row++) {
@@ -127,14 +147,69 @@ public class GameBoard implements GameBoardMethod {
 
     // Check if the current piece can move to the desired coordinates (x,y)
     public boolean pieceCanMove(Piece currentPiece, int x, int y){
-        if(gameBoard[x][y] != 0){
-            return false;
+         int tmp =0;
+        /*
+        copy piece coordinates
+         */
+        Point p1 = new Point(currentPiece.x1, currentPiece.y1);
+        Point p2 = new Point(currentPiece.x2, currentPiece.y2);
+        Point p3 = new Point(currentPiece.x3, currentPiece.y3);
+        Point p4 = new Point(currentPiece.x4, currentPiece.y4);
+
+        Point tmp1 = new Point(currentPiece.x1+x, currentPiece.y1+y);
+        Point tmp2 = new Point(currentPiece.x2+x, currentPiece.y2+y);
+        Point tmp3 = new Point(currentPiece.x3+x, currentPiece.y3+y);
+        Point tmp4 = new Point(currentPiece.x4+x, currentPiece.y4+y);
+
+        ArrayList<Point> tmpPieceCoordinates = new ArrayList<Point>();
+
+        tmpPieceCoordinates.addAll(Arrays.asList(tmp1, tmp2, tmp3, tmp4));
+
+
+        for(Point p : tmpPieceCoordinates ) {
+
+            if(p.x< boardHeight && p.y>=0 && p.y< boardWidth && gameBoard[p.x][p.y]==0) {
+                tmp++;
+            }
+
+            else if(p.equals(p1) || p.equals(p2) || p.equals(p3) || p.equals(p4)) {
+                tmp++;
+            }
         }
-        else{
+
+        return tmp == 4; 
+    }
+	
+	private  boolean canMoveLeft(Piece currentPiece) {
+        if(pieceCanMove(currentPiece, 0, -1)==true) {
             return true;
         }
+        return false;
     }
 
+    private boolean canMoveRight(Piece currentPiece){
+        if(pieceCanMove(currentPiece, 0,1) == true) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canMoveDown(Piece currentPiece) {
+        if(pieceCanMove(currentPiece, 1,0)==true) {
+            return true;
+        }
+        return false;
+    }
+
+	public void fastDrop(Piece currentPiece) {
+        deletePiece(currentPiece);
+
+        while(canMoveDown(currentPiece)==true) {
+            moveDown(currentPiece);
+         }
+        placePiece(currentPiece);
+    }
+	
     // Check if the current piece can rotate
     public boolean pieceCanRotate(Piece currentPiece){
 
