@@ -1,4 +1,4 @@
-package com.example.admin.tetris;
+package com.example.tetrisapp;
 
 public interface GameBoardMethod {
     /**
@@ -29,7 +29,7 @@ public interface GameBoardMethod {
      * Clears alls rows and returns how many rows were deleted
      * @return
      */
-    int clearRows();
+    int clearAndShiftRows();
 
     /**
      * It takes a current piece's colorCode and assigns it to each of

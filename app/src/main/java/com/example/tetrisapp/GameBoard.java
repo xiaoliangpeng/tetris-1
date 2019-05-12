@@ -1,10 +1,17 @@
 package com.example.tetrisapp;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 
-public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+public class GameBoard implements GameBoardMethod {
 
     int boardHeight = 20;
     int boardWidth = 10;
@@ -41,7 +48,7 @@ public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
     public void clearBoardGame(){
         for (int row = 0; row < 20; row++) {
             for (int col = 0; col < 10; col++) {
-                gameBoard[row][col] = Color.BLACK;
+                gameBoard[row][col] = 0;
             }
         }
     }
@@ -49,7 +56,7 @@ public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
     // Set all row elements to BLACK
     public void deleteRow(int rowNumber){
         for(int col = 0; col < 10; col++){
-            gameBoard[rowNumber][col] = Color.BLACK;
+            gameBoard[rowNumber][col] = 0;
         }
     }
 
@@ -63,11 +70,49 @@ public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
         return boardWidth;
     }
 
-    // ?????
-    public int clearRows(){
+    // Clear and shift completed rows
+    public int clearAndShiftRows(){
         int rowsDeleted = 0;
+        int deletedRowIndex;
+        ArrayList<Integer> arrayList = new ArrayList<>(); // Keep track of deletedRowIndex history
 
-        // do stuff
+        for(int row = 0; row < boardHeight; row++){
+            for(int col = boardWidth-1; col >= 0; col--){
+
+                // If board element is BLACK, exit row
+                if(gameBoard[row][col] == 0){
+                    break;
+                }
+
+                // If we're at the left-most column, delete row, add that row to arrayList
+                if(col == 0){
+                    deletedRowIndex = row;
+                    arrayList.add(row);
+                    rowsDeleted++;
+                    deleteRow(row);
+                }
+            }
+        }
+
+        // Save copy of rows that were not deleted
+        if(rowsDeleted > 0){
+            int highestRow = Collections.min(arrayList);
+            int gameBoardCopy[][] = new int [highestRow][boardWidth];
+
+            // Create board copy to preserve untouched rows
+            for(int row = 0; row < gameBoardCopy.length; row++){
+                for(int col = 0; col < gameBoardCopy[1].length; col++){
+                    gameBoardCopy[row][col] = gameBoard[row][col];
+                }
+            }
+
+            // Put unaffected rows from board copy back into original board
+            for(int row = 0; row < gameBoardCopy.length; row++){
+                for(int col = 0; col < gameBoardCopy[1].length; col++){
+                    gameBoard[row+rowsDeleted][col] = gameBoardCopy[row][col];
+                }
+            }
+        }
 
         return rowsDeleted;
     }
@@ -82,7 +127,7 @@ public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
 
     // Check if the current piece can move to the desired coordinates (x,y)
     public boolean pieceCanMove(Piece currentPiece, int x, int y){
-        if(gameBoard[x][y] != Color.BLACK){
+        if(gameBoard[x][y] != 0){
             return false;
         }
         else{
@@ -93,51 +138,61 @@ public class GameBoard implements com.example.admin.tetris.GameBoardMethod {
     // Check if the current piece can rotate
     public boolean pieceCanRotate(Piece currentPiece){
 
-        int tempX1, tempY1;
-        int tempX2, tempY2;
-        int tempX3, tempY3;
+        try {
+            ArrayList<Point> tmpPieceCoord = new ArrayList<>();
+            Piece tmpPiece = (Piece) currentPiece.clone();
 
-        // Get desired (x,y) coordinates
-        tempX1 = currentPiece.turnAroundX1(currentPiece.y2);
-        tempY1 = currentPiece.turnAroundY1(currentPiece.x2);
-        tempX2 = currentPiece.turnAroundX1(currentPiece.y3);
-        tempY2 = currentPiece.turnAroundY1(currentPiece.x3);
-        tempX3 = currentPiece.turnAroundX1(currentPiece.y4);
-        tempY3 = currentPiece.turnAroundY1(currentPiece.x4);
+            int tmpCount = 0;
 
-        // If desired coordinates have an existing square or are out-of-bounds, return FALSE ...
-        if((pieceCanMove(currentPiece, tempX1, tempY1) == false)
-           || (tempX1 > 10) || (tempY1 > 20)|| (tempX1 < 0) || (tempY1 < 0)){
-            return false;
+            Point p1 = new Point(currentPiece.x1, currentPiece.y1);
+            Point p2 = new Point(currentPiece.x2, currentPiece.y2);
+            Point p3 = new Point(currentPiece.x3, currentPiece.y3);
+            Point p4 = new Point(currentPiece.x4, currentPiece.y4);
+
+            tmpPiece.turnPiece();
+
+            Point tmpp1 = new Point(tmpPiece.x1, tmpPiece.y1);
+            Point tmpp2 = new Point(tmpPiece.x2, tmpPiece.y2);
+            Point tmpp3 = new Point(tmpPiece.x3, tmpPiece.y3);
+            Point tmpp4 = new Point(tmpPiece.x4, tmpPiece.y4);
+
+            tmpPieceCoord.addAll(Arrays.asList(tmpp1, tmpp2, tmpp3, tmpp4));
+
+            for(Point p:tmpPieceCoord){
+
+                if(p.x < boardHeight && p.x >= 0 && p.y >= 0 && p.y < boardWidth && gameBoard[p.x][p.y] == 0){
+                    tmpCount++;
+                }
+
+                else if(p.equals(p1) || p.equals(p2) || p.equals(p3) || p.equals(p4)){
+                    tmpCount++;
+                }
+            }
+
+            return (tmpCount == 4);
         }
-
-        else if((pieceCanMove(currentPiece, tempX2, tempY2) == false)
-                || (tempX2 > 10) || (tempY2 > 20)|| (tempX2 < 0) || (tempY2 < 0)){
-            return false;
-        }
-
-        else if((pieceCanMove(currentPiece, tempX3, tempY3) == false)
-                || (tempX3 > 10) || (tempY3 > 20)|| (tempX3 < 0) || (tempY3 < 0)){
-            return false;
-        }
-
-        // ... otherwise, return TRUE
-        else{
-            return true;
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
     // Makes current piece's squares BLACK
     public void deletePiece(Piece currentPiece){
-        gameBoard[currentPiece.x1][currentPiece.y1] = Color.BLACK;
-        gameBoard[currentPiece.x2][currentPiece.y2] = Color.BLACK;
-        gameBoard[currentPiece.x3][currentPiece.y3] = Color.BLACK;
-        gameBoard[currentPiece.x4][currentPiece.y4] = Color.BLACK;
+        gameBoard[currentPiece.x1][currentPiece.y1] = 0;
+        gameBoard[currentPiece.x2][currentPiece.y2] = 0;
+        gameBoard[currentPiece.x3][currentPiece.y3] = 0;
+        gameBoard[currentPiece.x4][currentPiece.y4] = 0;
     }
 
     // Rotate all squares of a piece
-    void rotatePiece(Piece currentPiece){
+    public void rotatePiece(Piece currentPiece){
 
+        if((pieceCanRotate(currentPiece)) && (currentPiece.colorCode != 1)){
+            deletePiece(currentPiece);
+            currentPiece.turnPiece();
+        }
+
+        placePiece(currentPiece);
     }
 
 }
