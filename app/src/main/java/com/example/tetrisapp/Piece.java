@@ -5,13 +5,16 @@ package com.example.tetrisapp;
  */
 public class Piece implements Cloneable {
 
+    // Coordinates of each square in piece
     public int x1, y1;
     public int x2, y2;
     public int x3, y3;
     public int x4, y4;
+
     public int colorCode;
     public Piece piece;
 
+    // Copy constructor
     public Piece(Piece piece){
         this.piece = piece;
 
@@ -26,8 +29,8 @@ public class Piece implements Cloneable {
         this.y4 = piece.y4;
     }
 
+    // Constructor creates colored squares (distinct shape) per piece
     public Piece(int colorCode){
-
         switch(colorCode){
             case 1: // square
                 x1 = 0; y1 = 7;
@@ -86,28 +89,37 @@ public class Piece implements Cloneable {
         return super.clone();
     }
 
+    // Move square by x amount and y amount
     public void move(int x, int y){
+
+        // Square 1
         x1 = x1 + x;
         y1 = y1 + y;
 
+        // Square 2
         x2 = x2 + x;
         y2 = y2 + y;
 
+        // Square 3
         x3 = x3 + x;
         y3 = y3 + y;
 
+        // Square 4
         x4 = x4 + x;
         y4 = y4 + y;
     }
 
+    // Gets new coordinate of x after rotation
     public int turnAroundX1(int y){
         return x1 + y - y1;
     }
 
+    // Gets new coordinate of y after rotation
     public int turnAroundY1(int x){
         return y1 + x - x1;
     }
 
+    // Rotate piece
     public void turnPiece(){
         int tempX1, tempY1;
         int tempX2, tempY2;
@@ -125,9 +137,9 @@ public class Piece implements Cloneable {
         tempY3 = turnAroundY1(x4);
         x4 = tempX3;
         y4 = tempY3;
-
     }
 
+    // Get smallest x-coord of four square points
     public int getMinXCoord(int x1, int x2, int x3, int x4){
         return Math.min(Math.min(x1,x2), Math.min(x3, x4));
     }
