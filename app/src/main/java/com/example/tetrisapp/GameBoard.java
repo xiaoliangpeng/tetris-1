@@ -10,17 +10,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Random;
 
 public class GameBoard implements GameBoardMethod {
 
+    // Declare game board
     int boardHeight = 20;
     int boardWidth = 10;
-
     private int gameBoard[][] = new int [boardHeight][boardWidth];
+
+
 	private ArrayList<Piece> pieceList = new ArrayList<Piece>();
     private  final int numOfPieces = 7;
-	
-	public GameBoard() {
+    Random random = new Random();
+
+    public GameBoard() {
         pieceList.add(new Piece(random.nextInt(numOfPieces)+1));
         pieceList.add(new Piece(random.nextInt(numOfPieces)+1));
      }
@@ -180,7 +184,7 @@ public class GameBoard implements GameBoardMethod {
         return tmp == 4; 
     }
 	
-	private  boolean canMoveLeft(Piece currentPiece) {
+	private boolean canMoveLeft(Piece currentPiece) {
         if(pieceCanMove(currentPiece, 0, -1)==true) {
             return true;
         }

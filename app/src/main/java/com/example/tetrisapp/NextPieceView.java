@@ -1,4 +1,4 @@
-package com.example.admin.tetris;
+package com.example.tetrisapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
+import com.example.tetrisapp.GameBoard;
+import com.example.tetrisapp.Piece;
+import com.example.tetrisapp.R;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,7 +24,7 @@ public class NextPieceView extends View {
     private GameBoard gameBoard;
     private ArrayList<Piece> pieceList;
 
-    private Bitmap squarePiece = BitmapFactory.decodeResource(getResources(), R.drawable.square);
+    private Bitmap oPiece = BitmapFactory.decodeResource(getResources(), R.drawable.opiece);
     private Bitmap tPiece = BitmapFactory.decodeResource(getResources(), R.drawable.tpiece);
     private Bitmap zPiece = BitmapFactory.decodeResource(getResources(), R.drawable.zpiece);
     private Bitmap sPiece = BitmapFactory.decodeResource(getResources(), R.drawable.spiece);
@@ -42,7 +47,7 @@ public class NextPieceView extends View {
             Piece s = gameBoard.getNextPiece();
 
             if (s.colorCode == 1) {
-               canvas.drawBitmap(squarePiece, 0, 0, p);
+               canvas.drawBitmap(oPiece, 0, 0, p);
             }
 
             if (s.colorCode == 2) {

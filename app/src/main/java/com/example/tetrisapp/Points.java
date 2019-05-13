@@ -1,4 +1,4 @@
-package com.example.admin.tetris;
+package com.example.tetrisapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
